@@ -76,7 +76,6 @@ namespace GroupProject
                 {
                     record.write(file);
                 }
-                ReadFile();
             }
             catch (IOException io)
             {
@@ -97,19 +96,19 @@ namespace GroupProject
         void txt_desciption_KeyPress(object sender, KeyPressEventArgs e)
         {
             // TODO: Implement Me
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void txt_YearsExp_KeyPress(object sender, KeyPressEventArgs e)
         {
             // TODO: Implement Me
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void txt_ExpLevel_KeyPress(object sender, KeyPressEventArgs e)
         {
             // TODO: Implement Me
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void txt_Name_KeyPress(object sender, KeyPressEventArgs e)
@@ -121,13 +120,13 @@ namespace GroupProject
         void txt_ID_KeyPress(object sender, KeyPressEventArgs e)
         {
             // TODO: Implement Me
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void cmd_Update_Click(object sender, EventArgs e)
         {
             // TODO: Implement Me
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void cmd_Insert_Click(object sender, EventArgs e)
