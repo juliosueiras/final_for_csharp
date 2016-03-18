@@ -69,6 +69,10 @@ namespace GroupProject
             SkillRecord record = new SkillRecord() ;
             try
             {
+                //Ensure that we are creating file here this ensures that we are removing a corrupt file.
+                //The loop below will destroy the data anyway, so we might as well make sure the file is clean.
+                file.Close();
+                file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
                 //position file pointer:
                 file.Seek(0, SeekOrigin.Begin);
                 for (int i = 0; i < maxRecords; i++)
