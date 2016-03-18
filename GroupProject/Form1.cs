@@ -324,10 +324,10 @@ namespace GroupProject
                     {
                         DataRow dr = table.NewRow();
                         dr["SkillID"] = sk.SkillID;
-                        dr["SkillName"] = sk.SkillName;
-                        dr["SkillLevel"] = sk.SkillLevel;
+                        dr["SkillName"] = sk.SkillName.Trim();
+                        dr["SkillLevel"] = sk.SkillLevel.Trim();
                         dr["YearsExperience"] = sk.YearsExperience;
-                        dr["Description"] = sk.Desc;
+                        dr["Description"] = sk.Desc.Trim();
                         table.Rows.Add(dr);
                     }
                 }
