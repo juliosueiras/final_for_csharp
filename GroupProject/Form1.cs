@@ -363,6 +363,8 @@ namespace GroupProject
             if (index < 1 || index > 100)
             {
                 DisplayErrorMessage("Skill ID must be within the range 1 to 100.", "Invalid Skill ID");
+                txt_ID.Focus();
+                txt_ID.SelectAll();
                 return false;
             }
             for (int i = 0; i < table.Rows.Count; i++)
@@ -372,6 +374,8 @@ namespace GroupProject
                     if (state.Equals(insertState))
                     {
                         DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                        txt_ID.Focus();
+                        txt_ID.SelectAll();
                         return false;
                     }
                     else if (state.Equals(updateState))
@@ -380,6 +384,8 @@ namespace GroupProject
                         if (index != currentIndex)
                         {
                             DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                            txt_ID.Focus();
+                            txt_ID.SelectAll();
                             return false;
                         }
                     }
