@@ -21,8 +21,8 @@ namespace GroupProject
         static int maxRecords = 100;
         int fileSize = SkillRecord.RECORD_SIZE * maxRecords;
         string fileName = "skills.dat";
-        FileStream file;
-        DataTable table;
+        FileStream file = null;
+        DataTable table = null;
         string insertState = "i";
         string updateState = "u";
         int selectedIndex = -1;
@@ -156,39 +156,11 @@ namespace GroupProject
                     }
                     catch(IOException ex)
                     {
-                        MessageBox.Show(ex.Message, "Error Updating Record");
+                        DisplayErrorMessage(ex.Message, "Error Inserting Record");
                     }
                 }
-                SetControlState("i");
+                SetControlState(insertState);
             }
-            //if (cmdInsert.Text.Equals("Return to Insert Mode"))
-            //{
-            //    setControlState("i");
-            //    return;
-            //}
-            //if (dataGood())
-            //{
-            //    int acct = Convert.ToInt32(txtAcctNum.Text);
-            //    if (isValidAccount(acct))
-            //    {
-            //        string fn = txtFName.Text;
-            //        string ln = txtLName.Text;
-            //        double bal = Convert.ToDouble(txtBalance.Text);  // unhandled ex here!!!
-            //        AccountRecordRA ra = new AccountRecordRA(acct, fn, ln, bal);
-            //        try
-            //        {
-            //            //position file pointer
-            //            raFile.Seek((acct - 1) * 44, SeekOrigin.Begin);
-            //            ra.write(raFile);
-            //            readFile();
-            //            clearText();
-            //        }
-            //        catch (IOException ex)
-            //        {
-            //            MessageBox.Show(ex.Message, "Error Inserting Record");
-            //        }
-            //    }
-            //}
         }
 
         void cmd_Delete_Click(object sender, EventArgs e)
@@ -212,6 +184,31 @@ namespace GroupProject
         void ReadFile()
         {
             // TODO: Implement
+            table.Rows.Clear();
+            SkillRecord sk = new SkillRecord();
+            try
+            {
+                file.Seek(0,SeekOrigin.Begin);
+                for (int i = 0; i < maxRecords; i++)
+                {
+                    sk.read(file);
+                    if (sk.SkillID > 0)
+                    {
+                        DataRow dr = table.NewRow();
+                        dr["SkillID"] = sk.SkillID;
+                        dr["SkillName"] = sk.SkillName;
+                        dr["SkillLevel"] = sk.SkillLevel;
+                        dr["YearsExperience"] = sk.YearsExperience;
+                        dr["Desc"] = sk.Desc;
+                        table.Rows.Add(dr);
+                    }
+                }
+                dataGridView1.ClearSelection();
+            }
+            catch (IOException ex)
+            {
+                DisplayErrorMessage(ex.Message, "Error Reading File");
+            }
         }
 
         void ClearText()
