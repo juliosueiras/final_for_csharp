@@ -18,11 +18,13 @@ namespace GroupProject
             InitializeComponent();
         }
 
-        int maxRecords = 100;
-        int fileSize = 0; // TODO: Adjust file length based on record
+        static int maxRecords = 100;
+        int fileSize = SkillRecord.RECORD_SIZE * maxRecords;
         string fileName = "skills.dat";
         FileStream file;
         DataTable table;
+        string insertState = "i";
+        string updateState = "u";
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -64,15 +66,15 @@ namespace GroupProject
 
         private void initData()
         {
-            Object record = null; // TODO: integrate record class
+            SkillRecord record = new SkillRecord() ;
+            record.SkillID = 0;
             try
             {
                 //position file pointer:
                 file.Seek(0, SeekOrigin.Begin);
                 for (int i = 0; i < maxRecords; i++)
                 {
-                    // TODO: integrate record class
-                    //record.write(file);
+                    record.write(file);
                 }
                 ReadFile();
             }
@@ -163,9 +165,19 @@ namespace GroupProject
             return true;
         }
 
-        bool IsValidIndex()
+        bool IsValidIndex(int index, string state)
         {
-            // TODO: Implement
+            if (index < 1 || index > 100)
+            {
+                DisplayErrorMessage("Index must be within the range 1 to 100.", "Invalid Index");
+            }
+            if (state.Equals(insertState))
+            {
+            }
+            else if (state.Equals(updateState))
+            {
+
+            }
             return true;
         }
 

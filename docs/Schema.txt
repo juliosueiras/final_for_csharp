@@ -6,6 +6,7 @@ For all text fields:
 SkillID (int) 4
 	-Numbers only
 	-Limit to 100
+	-ID cannot be 0
 SkillName (Java) (32) 33
 	-String(32)
 	-Include Letters, numbers, and spaces only
