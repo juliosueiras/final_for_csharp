@@ -182,6 +182,8 @@ namespace binaryFile1
             AccountRecordRA ra = new AccountRecordRA();
             try
             {
+                //clear the file incase it contains corrupt data
+                file.SetLength(0);
                 //position file pointer:
                 file.Seek(0, SeekOrigin.Begin);
                 for (int i = 0; i < MAX_RECORDS; i++)

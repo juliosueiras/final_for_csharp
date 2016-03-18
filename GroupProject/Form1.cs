@@ -69,6 +69,10 @@ namespace GroupProject
             SkillRecord record = new SkillRecord() ;
             try
             {
+                //Ensure that we are creating file here this ensures that we are removing a corrupt file.
+                //The loop below will destroy the data anyway, so we might as well make sure the file is clean.
+                file.Close();
+                file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
                 //position file pointer:
                 file.Seek(0, SeekOrigin.Begin);
                 for (int i = 0; i < maxRecords; i++)
@@ -223,7 +227,7 @@ namespace GroupProject
                 int skillId = Convert.ToInt32(txt_ID.Text);
                 string skillName = txt_Name.Text;
                 string skillLevel = txt_ExpLevel.Text;
-                int yearsExp = Convert.ToInt32(txt_ExpLevel.Text);
+                int yearsExp = Convert.ToInt32(txt_YearsExp.Text);
                 string desc = txt_desciption.Text;
                 SkillRecord sk = new SkillRecord(skillId, skillName, skillLevel, yearsExp, desc);
                 try
@@ -231,6 +235,7 @@ namespace GroupProject
                     file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
                     sk.write(file);
                     ReadFile();
+                    SetControlState(insertState);
                 }
                 catch (IOException ex)
                 {
@@ -267,7 +272,6 @@ namespace GroupProject
                         DisplayErrorMessage(ex.Message, "Error Inserting Record");
                     }
                 }
-                SetControlState(insertState);
             }
         }
 
@@ -285,13 +289,13 @@ namespace GroupProject
                     file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
                     sk.write(file);
                     ReadFile();
+                    SetControlState(insertState);
                 }
                 catch (IOException ex)
                 {
                     DisplayErrorMessage(ex.Message, "Error Deleting Record");
                 }
             }
-            SetControlState(insertState);
         }
 
         void dataGridView1_Click(object sender, EventArgs e)
@@ -330,6 +334,7 @@ namespace GroupProject
                     }
                 }
                 dataGridView1.ClearSelection();
+                ClearText();
             }
             catch (IOException ex)
             {
@@ -402,6 +407,8 @@ namespace GroupProject
             if (index < 1 || index > 100)
             {
                 DisplayErrorMessage("Skill ID must be within the range 1 to 100.", "Invalid Skill ID");
+                txt_ID.Focus();
+                txt_ID.SelectAll();
                 return false;
             }
             for (int i = 0; i < table.Rows.Count; i++)
@@ -411,6 +418,8 @@ namespace GroupProject
                     if (state.Equals(insertState))
                     {
                         DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                        txt_ID.Focus();
+                        txt_ID.SelectAll();
                         return false;
                     }
                     else if (state.Equals(updateState))
@@ -419,6 +428,8 @@ namespace GroupProject
                         if (index != currentIndex)
                         {
                             DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                            txt_ID.Focus();
+                            txt_ID.SelectAll();
                             return false;
                         }
                     }
@@ -429,7 +440,7 @@ namespace GroupProject
 
         void SetControlState(string state)
         {
-            if (state.Equals("i"))
+            if (state.Equals(insertState))
             {
                 txt_ID.Enabled = true;
                 cmd_Insert.Text = "Insert";
@@ -437,7 +448,7 @@ namespace GroupProject
                 cmd_Delete.Enabled = false;
                 ClearText();
             }
-            else if (state.Equals("u/d"))
+            else if (state.Equals(updateState))
             {
                 txt_ID.Enabled = false;
                 cmd_Insert.Text = "Cancel";
