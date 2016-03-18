@@ -218,7 +218,6 @@ namespace GroupProject
 
         void cmd_Update_Click(object sender, EventArgs e)
         {
-            // TODO: Implement Me
             if (DataGood())
             {
                 int skillId = Convert.ToInt32(txt_ID.Text);
@@ -311,7 +310,6 @@ namespace GroupProject
 
         void ReadFile()
         {
-            // TODO: Implement
             table.Rows.Clear();
             SkillRecord sk = new SkillRecord();
             try
