@@ -154,9 +154,18 @@ namespace GroupProject
             // TODO: Implement
         }
 
-        void ClearText()
+        private void ClearText()
         {
-            // TODO: Implement
+
+            txt_ExpLevel.Text = "";
+            txt_ID.Text = "";
+            txt_Name.Text = "";
+            txt_YearsExp.Text = "";
+            txt_desciption.Text = "";
+
+            txt_ID.Focus();
+
+            dataGridView1.ClearSelection();
         }
 
         bool DataGood()
