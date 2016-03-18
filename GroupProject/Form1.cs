@@ -222,7 +222,7 @@ namespace GroupProject
 
         void cmd_Update_Click(object sender, EventArgs e)
         {
-            if (DataGood())
+            if (dataGood())
             {
                 int skillId = Convert.ToInt32(txt_ID.Text);
                 string skillName = txt_Name.Text;
@@ -251,7 +251,7 @@ namespace GroupProject
                 SetControlState(insertState);
                 return;
             }
-            if(DataGood())
+            if(dataGood())
             {
                 int skillId = Convert.ToInt32(txt_ID.Text);
                 if(IsValidIndex(skillId, insertState))
