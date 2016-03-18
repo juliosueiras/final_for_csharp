@@ -23,6 +23,8 @@ namespace GroupProject
         string fileName = "skills.dat";
         FileStream file;
         DataTable table;
+        string insertState = "i";
+        string updateState = "u";
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -163,9 +165,19 @@ namespace GroupProject
             return true;
         }
 
-        bool IsValidIndex()
+        bool IsValidIndex(int index, string state)
         {
-            // TODO: Implement
+            if (index < 1 || index > 100)
+            {
+                DisplayErrorMessage("Index must be within the range 1 to 100.", "Invalid Index");
+            }
+            if (state.Equals(insertState))
+            {
+            }
+            else if (state.Equals(updateState))
+            {
+
+            }
             return true;
         }
 
