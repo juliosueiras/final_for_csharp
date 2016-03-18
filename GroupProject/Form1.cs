@@ -145,8 +145,14 @@ namespace GroupProject
 
         void dataGridView1_Click(object sender, EventArgs e)
         {
-            // TODO: Implement Me
-            throw new NotImplementedException();
+            dataGridView1.CurrentRow.Selected = true;
+            txt_ID.Text = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+            txt_Name.Text = dataGridView1.CurrentRow.Cells[1].Value.ToString();
+            txt_ExpLevel.Text = dataGridView1.CurrentRow.Cells[2].Value.ToString();
+            txt_YearsExp.Text = dataGridView1.CurrentRow.Cells[3].Value.ToString();
+            txt_desciption.Text = dataGridView1.CurrentRow.Cells[4].Value.ToString();
+            selectedIndex = Convert.ToInt32(txt_ID.Text);
+            SetControlState(updateState);
         }
 
         void ReadFile()
@@ -179,9 +185,13 @@ namespace GroupProject
                     {
                         DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
                     }
-                    else if (state.Equals(updateState) && index != selectedIndex)
+                    else if (state.Equals(updateState))
                     {
-                        DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                        int currentIndex = Convert.ToInt32(table.Rows[selectedIndex].ItemArray[0]);
+                        if (index != currentIndex)
+                        {
+                            DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                        }
                     }
                 }
             }
