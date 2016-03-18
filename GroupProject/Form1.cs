@@ -141,7 +141,7 @@ namespace GroupProject
             if(DataGood())
             {
                 int skillId = Convert.ToInt32(txt_ID.Text);
-                if(IsValidIndex(skillId))
+                if(IsValidIndex(skillId, insertState))
                 {
                     string skillName = txt_Name.Text;
                     string skillLevel = txt_ExpLevel.Text;
@@ -225,21 +225,12 @@ namespace GroupProject
             return true;
         }
 
-        bool IsValidIndex(int index)
+        bool IsValidIndex(int index, string state)
         {
             if (index < 1 || index > 100)
             {
                 DisplayErrorMessage("Skill ID must be within the range 1 to 100.", "Invalid Skill ID");
             }
-<<<<<<< HEAD
-            //if (state.Equals(insertState))
-            //{
-            //}
-            //else if (state.Equals(updateState))
-            //{
-
-            //}
-=======
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 if (index == Convert.ToInt32(table.Rows[i].ItemArray[0]))
@@ -258,7 +249,6 @@ namespace GroupProject
                     }
                 }
             }
->>>>>>> f419ea097ac36282bfa6533ab46fab01a1aee318
             return true;
         }
 
