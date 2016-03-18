@@ -25,6 +25,7 @@ namespace GroupProject
         DataTable table;
         string insertState = "i";
         string updateState = "u";
+        int selectedIndex = -1;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -86,8 +87,7 @@ namespace GroupProject
 
         void CreateTableAndDisplay()
         {
-            // TODO: Integrate table factory
-            //table = TableFactory.makeTable();
+            table = TableFactory.makeTable();
             bindingSource1.DataSource = table;
             dataGridView1.DataSource = bindingSource1;
             for (int i = 0; i < dataGridView1.Columns.Count; i++)
@@ -133,7 +133,7 @@ namespace GroupProject
 
         void cmd_Insert_Click(object sender, EventArgs e)
         {
-            if(cmd_Insert.Text.Equals("Returns to Insert Mode")
+            if(cmd_Insert.Text.Equals("Returns to Insert Mode"))
             {
                 SetControlState("i");
                 return;
@@ -223,8 +223,9 @@ namespace GroupProject
         {
             if (index < 1 || index > 100)
             {
-                DisplayErrorMessage("Index must be within the range 1 to 100.", "Invalid Index");
+                DisplayErrorMessage("Skill ID must be within the range 1 to 100.", "Invalid Skill ID");
             }
+<<<<<<< HEAD
             //if (state.Equals(insertState))
             //{
             //}
@@ -232,6 +233,22 @@ namespace GroupProject
             //{
 
             //}
+=======
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                if (index == Convert.ToInt32(table.Rows[i].ItemArray[0]))
+                {
+                    if (state.Equals(insertState))
+                    {
+                        DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                    }
+                    else if (state.Equals(updateState) && index != selectedIndex)
+                    {
+                        DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                    }
+                }
+            }
+>>>>>>> f419ea097ac36282bfa6533ab46fab01a1aee318
             return true;
         }
 
