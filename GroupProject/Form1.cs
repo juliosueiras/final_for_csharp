@@ -95,32 +95,126 @@ namespace GroupProject
         }
         void txt_desciption_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // TODO: Implement Me
-            //throw new NotImplementedException();
+            TextBox txtBx = (TextBox)sender;
+            int len = txtBx.Text.Length;
+            txtBx.SelectionStart = len;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (e.KeyChar == ' ')
+                {
+                    if (len == 0 || txtBx.Text[len - 1] == ' ')
+                    {
+                        e.Handled = true;
+                    }
+                }
+                else if (c >= 'a' && c <= 'z'){
+                    if (len > 2)
+                    {
+                        if (txtBx.Text[len - 2] == '.' && txtBx.Text[len - 1] == ' ')
+                        {
+                            e.KeyChar = (char)(c - 32);
+                        }
+                    }
+                    else if (len == 0)
+                    {
+                        e.KeyChar = (char)(c - 32);
+                    }
+                }
+            }
         }
 
         void txt_YearsExp_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // TODO: Implement Me
-            //throw new NotImplementedException();
+            ((TextBox)sender).SelectionStart = ((TextBox)sender).Text.Length;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (c < '0' || c > '9')
+                {
+                    e.Handled = true;
+                }
+            }
         }
 
         void txt_ExpLevel_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // TODO: Implement Me
-            //throw new NotImplementedException();
+            TextBox txtBx = (TextBox)sender;
+            int len = txtBx.Text.Length;
+            txtBx.SelectionStart = len;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (c >= '0' && c <= '9' ||
+                    c >= 'a' && c <= 'z' ||
+                    c >= 'A' && c <= 'Z')
+                {
+                    if (c >= 'a' && c <= 'z')
+                    {
+                        if (len == 0 || txtBx.Text[len - 1] == ' ')
+                        {
+                            e.KeyChar = (char)(c - 32);
+                        }
+                    }
+                }
+                else if (e.KeyChar == ' ')
+                {
+                    if (len == 0 || txtBx.Text[len - 1] == ' ')
+                    {
+                        e.Handled = true;
+                    }
+                }
+                else
+                {
+                    e.Handled = true;
+                }
+            }
         }
 
         void txt_Name_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // TODO: Implement Me
-            //throw new NotImplementedException();
+            TextBox txtBx = (TextBox)sender;
+            int len = txtBx.Text.Length;
+            txtBx.SelectionStart = len;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (c >= '0' && c <= '9' || 
+                    c >= 'a' && c <= 'z' ||
+                    c >= 'A' && c <= 'Z')
+                {
+                    if (c >= 'a' && c <= 'z')
+                    {
+                        if(len == 0 || txtBx.Text[len - 1] == ' '){
+                            e.KeyChar = (char)(c - 32);
+                        }
+                    }
+                }
+                else if (e.KeyChar == ' ')
+                {
+                    if (len == 0 || txtBx.Text[len - 1] == ' ')
+                    {
+                        e.Handled = true;
+                    }
+                }
+                else
+                {
+                    e.Handled = true;
+                }
+            }
         }
 
         void txt_ID_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // TODO: Implement Me
-            //throw new NotImplementedException();
+            ((TextBox)sender).SelectionStart = ((TextBox)sender).Text.Length;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (c < '0' || c > '9')
+                {
+                    e.Handled = true;
+                }
+            }
         }
 
         void cmd_Update_Click(object sender, EventArgs e)
@@ -163,8 +257,7 @@ namespace GroupProject
 
         void cmd_Delete_Click(object sender, EventArgs e)
         {
-            // TODO: Implement
-            throw new NotImplementedException();
+            
         }
 
         void dataGridView1_Click(object sender, EventArgs e)
