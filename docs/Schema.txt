@@ -1,0 +1,26 @@
+For all text fields:
+	-Disable right click
+	-Cursor position is locked
+	-Spaces cannot be the first character
+
+SkillID (int)
+	-Numbers only
+	-Limit to 100
+SkillName (Java) (32)
+	-String(32)
+	-Include Letters, numbers, and spaces only
+	-First letter capitalized, Case is optional after that
+	-Trim before store
+SkillLevel (Beginner, Intermmediate...) (32)
+	-String(32)
+	-Include Letters, numbers, and spaces only
+	-First letter capitalized, Case is optional after that
+	-Trim before store
+YearsExperience (2) (int)
+	-Numbers only
+	-limit to 2 digits (under 100)
+Description (...) (128)
+	-String(128)
+	-after a ". " and letter must be capitalized
+	-First character must be capitalized if a letter and optional after that.
+	-Trim before store
