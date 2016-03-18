@@ -24,7 +24,7 @@ namespace GroupProject
         FileStream file = null;
         DataTable table = null;
         string insertState = "i";
-        string updateState = "u";
+        string updateState = "u/d";
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -164,7 +164,25 @@ namespace GroupProject
         void cmd_Delete_Click(object sender, EventArgs e)
         {
             // TODO: Implement
-            throw new NotImplementedException();
+            if (MessageBox.Show("Are you sure you want delete this SkillRecord?", "Confirm Record Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+            {
+                // delete record
+                int skillId = Convert.ToInt32(txt_ID.Text);
+                SkillRecord sk = new SkillRecord();
+                sk.SkillID = 0;
+                try
+                {
+                    // position file pointer
+                    file.Seek((skillId - 1) * 203, SeekOrigin.Begin);
+                    sk.write(file);
+                    ReadFile();
+                }
+                catch (IOException ex)
+                {
+                    DisplayErrorMessage(ex.Message, "Error Deleting Record");
+                }
+            }
+            SetControlState(insertState);
         }
 
         void dataGridView1_Click(object sender, EventArgs e)
