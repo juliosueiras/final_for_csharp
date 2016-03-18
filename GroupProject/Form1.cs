@@ -67,7 +67,6 @@ namespace GroupProject
         private void initData()
         {
             SkillRecord record = new SkillRecord() ;
-            record.SkillID = 0;
             try
             {
                 //position file pointer:
@@ -281,7 +280,6 @@ namespace GroupProject
                 // delete record
                 int skillId = Convert.ToInt32(txt_ID.Text);
                 SkillRecord sk = new SkillRecord();
-                sk.SkillID = 0;
                 try
                 {
                     // position file pointer

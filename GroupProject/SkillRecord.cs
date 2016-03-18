@@ -18,7 +18,7 @@ namespace GroupProject
 
         public SkillRecord()
         {
-            SkillID = 1;
+            SkillID = 0;
             SkillName = "";
             SkillLevel = "";
             YearsExperience = 0;
