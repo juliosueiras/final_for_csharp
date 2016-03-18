@@ -283,7 +283,7 @@ namespace GroupProject
                 try
                 {
                     // position file pointer
-                    file.Seek((skillId - 1) * 203, SeekOrigin.Begin);
+                    file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
                     sk.write(file);
                     ReadFile();
                 }
