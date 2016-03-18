@@ -9,16 +9,16 @@ namespace GroupProject
 {
     class SkillRecord
     {
+        public static int RECORD_SIZE = 203;
         private int _skillID;
         private string _skillName;
         private string _skillLevel;
         private int _yearsExperience;
         private string _desc;
 
-
         public SkillRecord()
         {
-            SkillID = 0;
+            SkillID = 1;
             SkillName = "";
             SkillLevel = "";
             YearsExperience = 0;
