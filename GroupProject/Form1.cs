@@ -133,8 +133,62 @@ namespace GroupProject
 
         void cmd_Insert_Click(object sender, EventArgs e)
         {
-            // TODO: Implement me
-            throw new NotImplementedException();
+            if(cmd_Insert.Text.Equals("Returns to Insert Mode")
+            {
+                SetControlState("i");
+                return;
+            }
+            if(DataGood())
+            {
+                int skillId = Convert.ToInt32(txt_ID.Text);
+                if(IsValidIndex(skillId))
+                {
+                    string skillName = txt_Name.Text;
+                    string skillLevel = txt_ExpLevel.Text;
+                    int yearExp = Convert.ToInt32(txt_ExpLevel.Text);
+                    string desc = txt_desciption.Text;
+                    SkillRecord record = new SkillRecord(skillId, skillName, skillLevel, yearExp, desc);
+                    try
+                    {
+                        file.Seek((skillId - 1)*SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
+                        record.write(file);
+                        ReadFile();
+                    }
+                    catch(IOException ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error Updating Record");
+                    }
+                }
+                SetControlState("i");
+            }
+            //if (cmdInsert.Text.Equals("Return to Insert Mode"))
+            //{
+            //    setControlState("i");
+            //    return;
+            //}
+            //if (dataGood())
+            //{
+            //    int acct = Convert.ToInt32(txtAcctNum.Text);
+            //    if (isValidAccount(acct))
+            //    {
+            //        string fn = txtFName.Text;
+            //        string ln = txtLName.Text;
+            //        double bal = Convert.ToDouble(txtBalance.Text);  // unhandled ex here!!!
+            //        AccountRecordRA ra = new AccountRecordRA(acct, fn, ln, bal);
+            //        try
+            //        {
+            //            //position file pointer
+            //            raFile.Seek((acct - 1) * 44, SeekOrigin.Begin);
+            //            ra.write(raFile);
+            //            readFile();
+            //            clearText();
+            //        }
+            //        catch (IOException ex)
+            //        {
+            //            MessageBox.Show(ex.Message, "Error Inserting Record");
+            //        }
+            //    }
+            //}
         }
 
         void cmd_Delete_Click(object sender, EventArgs e)
@@ -165,19 +219,19 @@ namespace GroupProject
             return true;
         }
 
-        bool IsValidIndex(int index, string state)
+        bool IsValidIndex(int index)
         {
             if (index < 1 || index > 100)
             {
                 DisplayErrorMessage("Index must be within the range 1 to 100.", "Invalid Index");
             }
-            if (state.Equals(insertState))
-            {
-            }
-            else if (state.Equals(updateState))
-            {
+            //if (state.Equals(insertState))
+            //{
+            //}
+            //else if (state.Equals(updateState))
+            //{
 
-            }
+            //}
             return true;
         }
 
