@@ -267,7 +267,6 @@ namespace GroupProject
                         DisplayErrorMessage(ex.Message, "Error Inserting Record");
                     }
                 }
-                SetControlState(insertState);
             }
         }
 
@@ -330,6 +329,7 @@ namespace GroupProject
                     }
                 }
                 dataGridView1.ClearSelection();
+                ClearText();
             }
             catch (IOException ex)
             {
@@ -389,7 +389,7 @@ namespace GroupProject
 
         void SetControlState(string state)
         {
-            if (state.Equals("i"))
+            if (state.Equals(insertState))
             {
                 txt_ID.Enabled = true;
                 cmd_Insert.Text = "Insert";
@@ -397,7 +397,7 @@ namespace GroupProject
                 cmd_Delete.Enabled = false;
                 ClearText();
             }
-            else if (state.Equals("u/d"))
+            else if (state.Equals(updateState))
             {
                 txt_ID.Enabled = false;
                 cmd_Insert.Text = "Cancel";
