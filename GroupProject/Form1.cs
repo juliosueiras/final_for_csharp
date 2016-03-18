@@ -242,7 +242,7 @@ namespace GroupProject
                     SkillRecord record = new SkillRecord(skillId, skillName, skillLevel, yearExp, desc);
                     try
                     {
-                        file.Seek((skillId - 1)*SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
+                        file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
                         record.write(file);
                         ReadFile();
                     }
@@ -281,7 +281,7 @@ namespace GroupProject
 
         void dataGridView1_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow.Index >= 0)
+            if (dataGridView1.CurrentRow != null)
             {
                 dataGridView1.CurrentRow.Selected = true;
                 txt_ID.Text = dataGridView1.CurrentRow.Cells[0].Value.ToString();

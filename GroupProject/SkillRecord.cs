@@ -9,7 +9,7 @@ namespace GroupProject
 {
     class SkillRecord
     {
-        public static int RECORD_SIZE = 203;
+        public static int RECORD_SIZE = 204;
         private int _skillID;
         private string _skillName;
         private string _skillLevel;
@@ -49,14 +49,14 @@ namespace GroupProject
         {
             StringBuilder sb = new StringBuilder(n);
             sb.Length = 128;
-            bw.Write(sb.ToString()); //this is where the 1B prefix is added
+            bw.Write(sb.ToString());
         }
 
         private void formatName(BinaryWriter bw, string n)
         {
             StringBuilder sb = new StringBuilder(n);
             sb.Length = 32;
-            bw.Write(sb.ToString()); //this is where the 1B prefix is added
+            bw.Write(sb.ToString());
         }
 
         public void read(FileStream file)
