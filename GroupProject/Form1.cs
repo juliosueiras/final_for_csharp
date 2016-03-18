@@ -223,7 +223,7 @@ namespace GroupProject
                 int skillId = Convert.ToInt32(txt_ID.Text);
                 string skillName = txt_Name.Text;
                 string skillLevel = txt_ExpLevel.Text;
-                int yearsExp = Convert.ToInt32(txt_ExpLevel.Text);
+                int yearsExp = Convert.ToInt32(txt_YearsExp.Text);
                 string desc = txt_desciption.Text;
                 SkillRecord sk = new SkillRecord(skillId, skillName, skillLevel, yearsExp, desc);
                 try
