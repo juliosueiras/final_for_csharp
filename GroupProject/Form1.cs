@@ -126,7 +126,25 @@ namespace GroupProject
         void cmd_Update_Click(object sender, EventArgs e)
         {
             // TODO: Implement Me
-            //throw new NotImplementedException();
+            if (DataGood())
+            {
+                int skillId = Convert.ToInt32(txt_ID.Text);
+                string skillName = txt_Name.Text;
+                string skillLevel = txt_ExpLevel.Text;
+                int yearsExp = Convert.ToInt32(txt_ExpLevel.Text);
+                string desc = txt_desciption.Text;
+                SkillRecord sk = new SkillRecord(skillId, skillName, skillLevel, yearsExp, desc);
+                try
+                {
+                    file.Seek((skillId - 1) * 203, SeekOrigin.Begin);
+                    sk.write(file);
+                    ReadFile();
+                }
+                catch (IOException ex)
+                {
+                    DisplayErrorMessage(ex.Message, "Error Updating Record");
+                }
+            }
         }
 
         void cmd_Insert_Click(object sender, EventArgs e)
