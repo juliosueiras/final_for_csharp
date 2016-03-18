@@ -231,6 +231,7 @@ namespace GroupProject
                     file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
                     sk.write(file);
                     ReadFile();
+                    SetControlState(insertState);
                 }
                 catch (IOException ex)
                 {
@@ -284,13 +285,13 @@ namespace GroupProject
                     file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
                     sk.write(file);
                     ReadFile();
+                    SetControlState(insertState);
                 }
                 catch (IOException ex)
                 {
                     DisplayErrorMessage(ex.Message, "Error Deleting Record");
                 }
             }
-            SetControlState(insertState);
         }
 
         void dataGridView1_Click(object sender, EventArgs e)
