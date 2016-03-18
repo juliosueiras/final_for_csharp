@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -351,9 +351,49 @@ namespace GroupProject
             dataGridView1.ClearSelection();
         }
 
-        bool DataGood()
+        private bool dataGood()
         {
-            // TODO: Implement
+            if (txt_ID.Text.Length < 1)
+            {
+                MessageBox.Show("Skill ID Required!", "Missing Skill ID", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txt_ID.Focus();
+                return false;
+            }
+
+            if (txt_Name.Text.Length < 1)
+            {
+                MessageBox.Show("Skill Name Required!", "Missing Skill Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txt_Name.Focus();
+                return false;
+            }
+
+            if (txt_YearsExp.Text.Length < 1)
+            {
+                MessageBox.Show("Year of Exprience Required!", "Missing Year of Exprience", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txt_YearsExp.Focus();
+                return false;
+            }
+
+            if (txt_YearsExp.Text.Length < 1)
+            {
+                MessageBox.Show("Year of Exprience Required!", "Missing Year of Exprience", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txt_YearsExp.Focus();
+                return false;
+            }
+            else if(Convert.ToInt32(txt_YearsExp.Text) <= 0)
+            {
+                MessageBox.Show("Year of Exprience Have to be greater than 0!", "Year of Exprience less than 1", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txt_YearsExp.Focus();
+                return false;
+            }
+
+            if (txt_desciption.Text.Length < 1)
+            {
+                MessageBox.Show("Description Required!", "Missing Description", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txt_desciption.Focus();
+                return false;
+            }
+
             return true;
         }
 
