@@ -77,7 +77,7 @@ namespace GroupProject
                 {
                     record.write(file);
                 }
-                ReadFile();
+                
             }
             catch (IOException io)
             {
