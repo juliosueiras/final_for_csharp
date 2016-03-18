@@ -200,7 +200,7 @@
             this.Controls.Add(this.cmd_Update);
             this.Controls.Add(this.cmd_Insert);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Skill Manager";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();

@@ -15,7 +15,7 @@ SkillName (Java) (32) 33
 SkillLevel (Beginner, Intermmediate...) (32) 33
 	-String(32)
 	-Include Letters, numbers, and spaces only
-	-First letter capitalized, Case is optional after that
+	-First letter of each word capitalized, Case is optional after that
 	-Trim before store
 YearsExperience (2) (int) 4
 	-Numbers only
