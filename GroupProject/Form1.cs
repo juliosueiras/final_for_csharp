@@ -24,7 +24,7 @@ namespace GroupProject
         FileStream file = null;
         DataTable table = null;
         string insertState = "i";
-        string updateState = "u";
+        string updateState = "u/d";
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -237,7 +237,7 @@ namespace GroupProject
                 {
                     string skillName = txt_Name.Text;
                     string skillLevel = txt_ExpLevel.Text;
-                    int yearExp = Convert.ToInt32(txt_ExpLevel.Text);
+                    int yearExp = Convert.ToInt32(txt_YearsExp.Text);
                     string desc = txt_desciption.Text;
                     SkillRecord record = new SkillRecord(skillId, skillName, skillLevel, yearExp, desc);
                     try
@@ -257,7 +257,26 @@ namespace GroupProject
 
         void cmd_Delete_Click(object sender, EventArgs e)
         {
-            
+            // TODO: Implement
+            if (MessageBox.Show("Are you sure you want delete this SkillRecord?", "Confirm Record Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+            {
+                // delete record
+                int skillId = Convert.ToInt32(txt_ID.Text);
+                SkillRecord sk = new SkillRecord();
+                sk.SkillID = 0;
+                try
+                {
+                    // position file pointer
+                    file.Seek((skillId - 1) * 203, SeekOrigin.Begin);
+                    sk.write(file);
+                    ReadFile();
+                }
+                catch (IOException ex)
+                {
+                    DisplayErrorMessage(ex.Message, "Error Deleting Record");
+                }
+            }
+            SetControlState(insertState);
         }
 
         void dataGridView1_Click(object sender, EventArgs e)
@@ -292,7 +311,7 @@ namespace GroupProject
                         dr["SkillName"] = sk.SkillName;
                         dr["SkillLevel"] = sk.SkillLevel;
                         dr["YearsExperience"] = sk.YearsExperience;
-                        dr["Desc"] = sk.Desc;
+                        dr["Description"] = sk.Desc;
                         table.Rows.Add(dr);
                     }
                 }
@@ -304,9 +323,18 @@ namespace GroupProject
             }
         }
 
-        void ClearText()
+        private void ClearText()
         {
-            // TODO: Implement
+
+            txt_ExpLevel.Text = "";
+            txt_ID.Text = "";
+            txt_Name.Text = "";
+            txt_YearsExp.Text = "";
+            txt_desciption.Text = "";
+
+            txt_ID.Focus();
+
+            dataGridView1.ClearSelection();
         }
 
         bool DataGood()

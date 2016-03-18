@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,9 +34,9 @@ namespace GroupProject
             Desc = desc;
         }
 
-        public void write(FileStream raFile)
+        public void write(FileStream file)
         {
-            BinaryWriter bw = new BinaryWriter(raFile);  //hover over BinaryWriter -> how to read the namespace in intellisense?           
+            BinaryWriter bw = new BinaryWriter(file);  //hover over BinaryWriter -> how to read the namespace in intellisense?           
             //write data in field order
             bw.Write(SkillID);
             formatName(bw, SkillName);
@@ -59,9 +59,9 @@ namespace GroupProject
             bw.Write(sb.ToString()); //this is where the 1B prefix is added
         }
 
-        public void read(FileStream raFile)
+        public void read(FileStream file)
         {
-            BinaryReader br = new BinaryReader(raFile);
+            BinaryReader br = new BinaryReader(file);
             SkillID = br.ReadInt32();
             SkillName = br.ReadString().Replace('\0',' ');
             SkillLevel = br.ReadString().Replace('\0', ' ');
