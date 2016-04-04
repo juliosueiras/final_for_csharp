@@ -372,22 +372,22 @@ namespace GroupProject
                 return false;
             }
 
-            if (txt_YearsExp.Text.Length < 1)
+            if (txt_ExpLevel.Text.Length < 1)
             {
-                MessageBox.Show("Year of Exprience Required!", "Missing Year of Exprience", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Exprience Level Required!", "Missing Year of Exprience Level", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txt_YearsExp.Focus();
                 return false;
             }
 
             if (txt_YearsExp.Text.Length < 1)
             {
-                MessageBox.Show("Year of Exprience Required!", "Missing Year of Exprience", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Years of Exprience Required!", "Missing Years of Exprience", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txt_YearsExp.Focus();
                 return false;
             }
-            else if(Convert.ToInt32(txt_YearsExp.Text) <= 0)
+            else if(Convert.ToInt32(txt_YearsExp.Text) < 0)
             {
-                MessageBox.Show("Year of Exprience Have to be greater than 0!", "Year of Exprience less than 1", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Years of Exprience Have to be at least 0!", "Years of Exprience less than 0", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txt_YearsExp.Focus();
                 return false;
             }
