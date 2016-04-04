@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,68 +18,448 @@ namespace GroupProject
             InitializeComponent();
         }
 
-        FileStream file;
-        DataTable table;
+        static int maxRecords = 100;
+        int fileSize = SkillRecord.RECORD_SIZE * maxRecords;
+        string fileName = "skills.dat";
+        FileStream file = null;
+        DataTable table = null;
+        string insertState = "i";
+        string updateState = "u/d";
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Init table
-            //Init file
-            // TODO: Implement Me
+            Initialize();
             dataGridView1.Click += dataGridView1_Click;
             cmd_Delete.Click += cmd_Delete_Click;
             cmd_Insert.Click += cmd_Insert_Click;
             cmd_Update.Click += cmd_Update_Click;
+            txt_ID.KeyPress += txt_ID_KeyPress;
+            txt_Name.KeyPress += txt_Name_KeyPress;
+            txt_ExpLevel.KeyPress += txt_ExpLevel_KeyPress;
+            txt_YearsExp.KeyPress += txt_YearsExp_KeyPress;
+            txt_desciption.KeyPress += txt_desciption_KeyPress;
+        }
+
+        private void Initialize()
+        {
+            try
+            {
+                file = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                if (file.Length != fileSize)
+                {
+                    initData();
+                }
+                CreateTableAndDisplay();
+                ReadFile();
+            }
+            catch (IOException io)
+            {
+                DisplayErrorMessage(io.Message, "Failed to Create File");
+            }
+            //Disable right click
+            txt_ID.ContextMenuStrip = new ContextMenuStrip();
+            txt_Name.ContextMenuStrip = new ContextMenuStrip();
+            txt_ExpLevel.ContextMenuStrip = new ContextMenuStrip();
+            txt_YearsExp.ContextMenuStrip = new ContextMenuStrip();
+            txt_desciption.ContextMenuStrip = new ContextMenuStrip();
+        }
+
+        private void initData()
+        {
+            SkillRecord record = new SkillRecord() ;
+            try
+            {
+                //Ensure that we are creating file here this ensures that we are removing a corrupt file.
+                //The loop below will destroy the data anyway, so we might as well make sure the file is clean.
+                file.Close();
+                file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
+                //position file pointer:
+                file.Seek(0, SeekOrigin.Begin);
+                for (int i = 0; i < maxRecords; i++)
+                {
+                    record.write(file);
+                }
+            }
+            catch (IOException io)
+            {
+                DisplayErrorMessage(io.Message, "Failed to Initialize File");
+            }
+        }
+
+        void CreateTableAndDisplay()
+        {
+            table = TableFactory.makeTable();
+            bindingSource1.DataSource = table;
+            dataGridView1.DataSource = bindingSource1;
+            for (int i = 0; i < dataGridView1.Columns.Count; i++)
+            {
+                dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+        }
+        void txt_desciption_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            TextBox txtBx = (TextBox)sender;
+            int len = txtBx.Text.Length;
+            txtBx.SelectionStart = len;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (e.KeyChar == ' ')
+                {
+                    if (len == 0 || txtBx.Text[len - 1] == ' ')
+                    {
+                        e.Handled = true;
+                    }
+                }
+                else if (c >= 'a' && c <= 'z'){
+                    if (len > 2)
+                    {
+                        if (txtBx.Text[len - 2] == '.' && txtBx.Text[len - 1] == ' ')
+                        {
+                            e.KeyChar = (char)(c - 32);
+                        }
+                    }
+                    else if (len == 0)
+                    {
+                        e.KeyChar = (char)(c - 32);
+                    }
+                }
+            }
+        }
+
+        void txt_YearsExp_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ((TextBox)sender).SelectionStart = ((TextBox)sender).Text.Length;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (c < '0' || c > '9')
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        void txt_ExpLevel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            TextBox txtBx = (TextBox)sender;
+            int len = txtBx.Text.Length;
+            txtBx.SelectionStart = len;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (c >= '0' && c <= '9' ||
+                    c >= 'a' && c <= 'z' ||
+                    c >= 'A' && c <= 'Z')
+                {
+                    if (c >= 'a' && c <= 'z')
+                    {
+                        if (len == 0 || txtBx.Text[len - 1] == ' ')
+                        {
+                            e.KeyChar = (char)(c - 32);
+                        }
+                    }
+                }
+                else if (e.KeyChar == ' ')
+                {
+                    if (len == 0 || txtBx.Text[len - 1] == ' ')
+                    {
+                        e.Handled = true;
+                    }
+                }
+                else
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        void txt_Name_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            TextBox txtBx = (TextBox)sender;
+            int len = txtBx.Text.Length;
+            txtBx.SelectionStart = len;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (c >= '0' && c <= '9' || 
+                    c >= 'a' && c <= 'z' ||
+                    c >= 'A' && c <= 'Z')
+                {
+                    if (c >= 'a' && c <= 'z')
+                    {
+                        if(len == 0 || txtBx.Text[len - 1] == ' '){
+                            e.KeyChar = (char)(c - 32);
+                        }
+                    }
+                }
+                else if (e.KeyChar == ' ')
+                {
+                    if (len == 0 || txtBx.Text[len - 1] == ' ')
+                    {
+                        e.Handled = true;
+                    }
+                }
+                else
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        void txt_ID_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ((TextBox)sender).SelectionStart = ((TextBox)sender).Text.Length;
+            char c = e.KeyChar;
+            if (c != (char)Keys.Back)
+            {
+                if (c < '0' || c > '9')
+                {
+                    e.Handled = true;
+                }
+            }
         }
 
         void cmd_Update_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (dataGood())
+            {
+                int skillId = Convert.ToInt32(txt_ID.Text);
+                string skillName = txt_Name.Text;
+                string skillLevel = txt_ExpLevel.Text;
+                int yearsExp = Convert.ToInt32(txt_YearsExp.Text);
+                string desc = txt_desciption.Text;
+                SkillRecord sk = new SkillRecord(skillId, skillName, skillLevel, yearsExp, desc);
+                try
+                {
+                    file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
+                    sk.write(file);
+                    ReadFile();
+                    SetControlState(insertState);
+                }
+                catch (IOException ex)
+                {
+                    DisplayErrorMessage(ex.Message, "Error Updating Record");
+                }
+            }
         }
 
         void cmd_Insert_Click(object sender, EventArgs e)
         {
-            // TODO: Implement me
-            throw new NotImplementedException();
+            if(cmd_Insert.Text.Equals("Cancel"))
+            {
+                SetControlState(insertState);
+                return;
+            }
+            if(dataGood())
+            {
+                int skillId = Convert.ToInt32(txt_ID.Text);
+                if(IsValidIndex(skillId, insertState))
+                {
+                    string skillName = txt_Name.Text;
+                    string skillLevel = txt_ExpLevel.Text;
+                    int yearExp = Convert.ToInt32(txt_YearsExp.Text);
+                    string desc = txt_desciption.Text;
+                    SkillRecord record = new SkillRecord(skillId, skillName, skillLevel, yearExp, desc);
+                    try
+                    {
+                        file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
+                        record.write(file);
+                        ReadFile();
+                    }
+                    catch(IOException ex)
+                    {
+                        DisplayErrorMessage(ex.Message, "Error Inserting Record");
+                    }
+                }
+            }
         }
 
         void cmd_Delete_Click(object sender, EventArgs e)
         {
             // TODO: Implement
-            throw new NotImplementedException();
+            if (MessageBox.Show("Are you sure you want delete this SkillRecord?", "Confirm Record Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+            {
+                // delete record
+                int skillId = Convert.ToInt32(txt_ID.Text);
+                SkillRecord sk = new SkillRecord();
+                try
+                {
+                    // position file pointer
+                    file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
+                    sk.write(file);
+                    ReadFile();
+                    SetControlState(insertState);
+                }
+                catch (IOException ex)
+                {
+                    DisplayErrorMessage(ex.Message, "Error Deleting Record");
+                }
+            }
         }
 
         void dataGridView1_Click(object sender, EventArgs e)
         {
-            // TODO: Implement Me
-            throw new NotImplementedException();
+            if (dataGridView1.CurrentRow != null)
+            {
+                dataGridView1.CurrentRow.Selected = true;
+                txt_ID.Text = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+                txt_Name.Text = dataGridView1.CurrentRow.Cells[1].Value.ToString();
+                txt_ExpLevel.Text = dataGridView1.CurrentRow.Cells[2].Value.ToString();
+                txt_YearsExp.Text = dataGridView1.CurrentRow.Cells[3].Value.ToString();
+                txt_desciption.Text = dataGridView1.CurrentRow.Cells[4].Value.ToString();
+                SetControlState(updateState);
+            }
         }
 
         void ReadFile()
         {
-            // TODO: Implement
+            table.Rows.Clear();
+            SkillRecord sk = new SkillRecord();
+            try
+            {
+                file.Seek(0,SeekOrigin.Begin);
+                for (int i = 0; i < maxRecords; i++)
+                {
+                    sk.read(file);
+                    if (sk.SkillID > 0)
+                    {
+                        DataRow dr = table.NewRow();
+                        dr["SkillID"] = sk.SkillID;
+                        dr["SkillName"] = sk.SkillName.Trim();
+                        dr["SkillLevel"] = sk.SkillLevel.Trim();
+                        dr["YearsExperience"] = sk.YearsExperience;
+                        dr["Description"] = sk.Desc.Trim();
+                        table.Rows.Add(dr);
+                    }
+                }
+                dataGridView1.ClearSelection();
+                ClearText();
+            }
+            catch (IOException ex)
+            {
+                DisplayErrorMessage(ex.Message, "Error Reading File");
+            }
         }
 
-        void ClearText()
+        private void ClearText()
         {
-            // TODO: Implement
+
+            txt_ExpLevel.Text = "";
+            txt_ID.Text = "";
+            txt_Name.Text = "";
+            txt_YearsExp.Text = "";
+            txt_desciption.Text = "";
+
+            txt_ID.Focus();
+
+            dataGridView1.ClearSelection();
         }
 
-        bool DataGood()
+        private bool dataGood()
         {
-            // TODO: Implement
+            if (txt_ID.Text.Length < 1)
+            {
+                DisplayErrorMessage("Skill ID Required!", "Missing Skill ID");
+                txt_ID.Focus();
+                return false;
+            }
+
+            if (txt_Name.Text.Length < 1)
+            {
+                DisplayErrorMessage("Skill Name Required!", "Missing Skill Name");
+                txt_Name.Focus();
+                return false;
+            }
+
+            if (txt_ExpLevel.Text.Length < 1)
+            {
+                DisplayErrorMessage("Exprience Level Required!", "Missing Year of Exprience Level");
+                txt_ExpLevel.Focus();
+                return false;
+            }
+
+            if (txt_YearsExp.Text.Length < 1)
+            {
+                DisplayErrorMessage("Years of Exprience Required!", "Missing Years of Exprience");
+                txt_YearsExp.Focus();
+                return false;
+            }
+            else if(Convert.ToInt32(txt_YearsExp.Text) < 0)
+            {
+                DisplayErrorMessage("Years of Exprience Have to be at least 0!", "Years of Exprience less than 0");
+                txt_YearsExp.Focus();
+                return false;
+            }
+
+            if (txt_desciption.Text.Length < 1)
+            {
+                DisplayErrorMessage("Description Required!", "Missing Description");
+                txt_desciption.Focus();
+                return false;
+            }
+
             return true;
         }
 
-        bool IsValidIndex()
+        bool IsValidIndex(int index, string state)
         {
-            // TODO: Implement
+            if (index < 1 || index > 100)
+            {
+                DisplayErrorMessage("Skill ID must be within the range 1 to 100.", "Invalid Skill ID");
+                txt_ID.Focus();
+                txt_ID.SelectAll();
+                return false;
+            }
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                if (index == Convert.ToInt32(table.Rows[i].ItemArray[0]))
+                {
+                    if (state.Equals(insertState))
+                    {
+                        DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                        txt_ID.Focus();
+                        txt_ID.SelectAll();
+                        return false;
+                    }
+                    else if (state.Equals(updateState))
+                    {
+                        int currentIndex = Convert.ToInt32(txt_ID.Text);
+                        if (index != currentIndex)
+                        {
+                            DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                            txt_ID.Focus();
+                            txt_ID.SelectAll();
+                            return false;
+                        }
+                    }
+                }
+            }
             return true;
         }
 
         void SetControlState(string state)
         {
-            // TODO: Implement
+            if (state.Equals(insertState))
+            {
+                txt_ID.Enabled = true;
+                cmd_Insert.Text = "Insert";
+                cmd_Update.Enabled = false;
+                cmd_Delete.Enabled = false;
+                ClearText();
+            }
+            else if (state.Equals(updateState))
+            {
+                txt_ID.Enabled = false;
+                cmd_Insert.Text = "Cancel";
+                cmd_Update.Enabled = true;
+                cmd_Delete.Enabled = true;
+            }
+        }
+
+        void DisplayErrorMessage(string message, string title)
+        {
+            MessageBox.Show(message, "ERROR: " + title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

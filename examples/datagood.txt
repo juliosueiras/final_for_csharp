@@ -1,0 +1,45 @@
+private bool dataGood()
+        {
+            int len = txtName.Text.Length;
+            if (len < 1)
+            {
+                //Name is empty
+                MessageBox.Show("Name Required!", "Missing Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (len == 1)
+            {
+                //Name is too short
+                MessageBox.Show("First name must be two or more characters!", "Invalid First Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (len > 1)
+            {
+                //First name complies with rules... checking last name
+                int spaceIndex = txtName.Text.IndexOf(' ');
+                if (spaceIndex == -1 || spaceIndex == len - 1) //No space, or last character is space
+                {
+                    MessageBox.Show("Last Name Required!", "Missing Last Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (spaceIndex == len - 2) //Last name is shorter than 2 characters
+                {
+                    MessageBox.Show("Last Name must be two or more characters!", "Invalid Last Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+            int plen = txtPhone.Text.Length;
+            if (plen < 1)
+            {
+                MessageBox.Show("Phone number Required!", "Missing Phone Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtPhone.Focus();
+                return false;
+            }
+            if (plen != 12)
+            {
+                MessageBox.Show("Phone number is too short!", "Invalid Phone Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtPhone.Focus();
+                return false;
+            }
+            return true;
+        }
