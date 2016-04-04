@@ -360,41 +360,41 @@ namespace GroupProject
         {
             if (txt_ID.Text.Length < 1)
             {
-                MessageBox.Show("Skill ID Required!", "Missing Skill ID", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayErrorMessage("Skill ID Required!", "Missing Skill ID");
                 txt_ID.Focus();
                 return false;
             }
 
             if (txt_Name.Text.Length < 1)
             {
-                MessageBox.Show("Skill Name Required!", "Missing Skill Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayErrorMessage("Skill Name Required!", "Missing Skill Name");
                 txt_Name.Focus();
                 return false;
             }
 
             if (txt_ExpLevel.Text.Length < 1)
             {
-                MessageBox.Show("Exprience Level Required!", "Missing Year of Exprience Level", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txt_YearsExp.Focus();
+                DisplayErrorMessage("Exprience Level Required!", "Missing Year of Exprience Level");
+                txt_ExpLevel.Focus();
                 return false;
             }
 
             if (txt_YearsExp.Text.Length < 1)
             {
-                MessageBox.Show("Years of Exprience Required!", "Missing Years of Exprience", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayErrorMessage("Years of Exprience Required!", "Missing Years of Exprience");
                 txt_YearsExp.Focus();
                 return false;
             }
             else if(Convert.ToInt32(txt_YearsExp.Text) < 0)
             {
-                MessageBox.Show("Years of Exprience Have to be at least 0!", "Years of Exprience less than 0", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayErrorMessage("Years of Exprience Have to be at least 0!", "Years of Exprience less than 0");
                 txt_YearsExp.Focus();
                 return false;
             }
 
             if (txt_desciption.Text.Length < 1)
             {
-                MessageBox.Show("Description Required!", "Missing Description", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayErrorMessage("Description Required!", "Missing Description");
                 txt_desciption.Focus();
                 return false;
             }
