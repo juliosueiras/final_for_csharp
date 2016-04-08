@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace GroupProject
+namespace SkillTracker
 {
     class TableFactory
     {
-        public static DataTable makeTable()
+        public static DataTable MakeTable()
         {
-
             DataTable table = new DataTable();
 
             table.Columns.Add(NewColumn("SkillID", "System.Int32"));
@@ -24,12 +23,10 @@ namespace GroupProject
         }
 
         public static DataColumn NewColumn(String name, String type) {
-
             DataColumn dc = new DataColumn();
             dc.ColumnName = name;
             dc.DataType = Type.GetType(type);
             return dc;
-
         }
     }
 }

@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace GroupProject
+namespace SkillTracker
 {
     class SkillRecord
     {
         public static int RECORD_SIZE = 204;
+
         private int _skillID;
         private string _skillName;
         private string _skillLevel;
@@ -34,32 +35,25 @@ namespace GroupProject
             Desc = desc;
         }
 
-        public void write(FileStream file)
+        public void Write(FileStream file)
         {
-            BinaryWriter bw = new BinaryWriter(file);  //hover over BinaryWriter -> how to read the namespace in intellisense?           
+            BinaryWriter bw = new BinaryWriter(file);           
             //write data in field order
             bw.Write(SkillID);
-            formatName(bw, SkillName);
-            formatName(bw, SkillLevel);
+            bw.Write(FormatString(SkillName, 32));
+            bw.Write(FormatString(SkillLevel, 32));
             bw.Write(YearsExperience);
-            formatDesc(bw, Desc);
+            bw.Write(FormatString(Desc, 128));
         }
 
-        private void formatDesc(BinaryWriter bw, string n)
+        private string FormatString(string n, int maxStringLength)
         {
             StringBuilder sb = new StringBuilder(n);
-            sb.Length = 128;
-            bw.Write(sb.ToString());
+            sb.Length = maxStringLength;
+            return sb.ToString();
         }
 
-        private void formatName(BinaryWriter bw, string n)
-        {
-            StringBuilder sb = new StringBuilder(n);
-            sb.Length = 32;
-            bw.Write(sb.ToString());
-        }
-
-        public void read(FileStream file)
+        public void Read(FileStream file)
         {
             BinaryReader br = new BinaryReader(file);
             SkillID = br.ReadInt32();

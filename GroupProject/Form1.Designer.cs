@@ -1,4 +1,4 @@
-﻿namespace GroupProject
+﻿namespace SkillTracker
 {
     partial class Form1
     {

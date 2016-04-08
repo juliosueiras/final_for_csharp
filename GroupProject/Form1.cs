@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GroupProject
+namespace SkillTracker
 {
     public partial class Form1 : Form
     {
@@ -18,13 +18,14 @@ namespace GroupProject
             InitializeComponent();
         }
 
-        static int maxRecords = 100;
-        int fileSize = SkillRecord.RECORD_SIZE * maxRecords;
-        string fileName = "skills.dat";
-        FileStream file = null;
-        DataTable table = null;
-        string insertState = "i";
-        string updateState = "u/d";
+        private static int maxRecords = 100;
+
+        private int fileSize = SkillRecord.RECORD_SIZE * maxRecords;
+        private string fileName = "skills.dat";
+        private string insertState = "i";
+        private string updateState = "u/d";
+        private FileStream file = null;
+        private DataTable table = null;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -47,14 +48,14 @@ namespace GroupProject
                 file = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 if (file.Length != fileSize)
                 {
-                    initData();
+                    CreateDataFile();
                 }
-                CreateTableAndDisplay();
-                ReadFile();
+                InitializeDataTable();
+                ReadFileAndUpdateTable();
             }
             catch (IOException io)
             {
-                DisplayErrorMessage(io.Message, "Failed to Create File");
+                DisplayErrorMessage(io.Message, "Failed to Open File");
             }
             //Disable right click
             txt_ID.ContextMenuStrip = new ContextMenuStrip();
@@ -64,9 +65,9 @@ namespace GroupProject
             txt_desciption.ContextMenuStrip = new ContextMenuStrip();
         }
 
-        private void initData()
+        private void CreateDataFile()
         {
-            SkillRecord record = new SkillRecord() ;
+            SkillRecord record = new SkillRecord();
             try
             {
                 //Ensure that we are creating file here this ensures that we are removing a corrupt file.
@@ -77,18 +78,18 @@ namespace GroupProject
                 file.Seek(0, SeekOrigin.Begin);
                 for (int i = 0; i < maxRecords; i++)
                 {
-                    record.write(file);
+                    record.Write(file);
                 }
             }
             catch (IOException io)
             {
-                DisplayErrorMessage(io.Message, "Failed to Initialize File");
+                DisplayErrorMessage(io.Message, "Failed to Create File");
             }
         }
 
-        void CreateTableAndDisplay()
+        void InitializeDataTable()
         {
-            table = TableFactory.makeTable();
+            table = TableFactory.MakeTable();
             bindingSource1.DataSource = table;
             dataGridView1.DataSource = bindingSource1;
             for (int i = 0; i < dataGridView1.Columns.Count; i++)
@@ -96,6 +97,7 @@ namespace GroupProject
                 dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
             }
         }
+
         void txt_desciption_KeyPress(object sender, KeyPressEventArgs e)
         {
             TextBox txtBx = (TextBox)sender;
@@ -111,7 +113,8 @@ namespace GroupProject
                         e.Handled = true;
                     }
                 }
-                else if (c >= 'a' && c <= 'z'){
+                else if (c >= 'a' && c <= 'z')
+                {
                     if (len > 2)
                     {
                         if (txtBx.Text[len - 2] == '.' && txtBx.Text[len - 1] == ' ')
@@ -182,13 +185,15 @@ namespace GroupProject
             char c = e.KeyChar;
             if (c != (char)Keys.Back)
             {
-                if (c >= '0' && c <= '9' || 
+                if (c >= '0' && c <= '9' ||
                     c >= 'a' && c <= 'z' ||
-                    c >= 'A' && c <= 'Z')
+                    c >= 'A' && c <= 'Z' || 
+                    c == '.')
                 {
                     if (c >= 'a' && c <= 'z')
                     {
-                        if(len == 0 || txtBx.Text[len - 1] == ' '){
+                        if (len == 0 || txtBx.Text[len - 1] == ' ')
+                        {
                             e.KeyChar = (char)(c - 32);
                         }
                     }
@@ -222,19 +227,19 @@ namespace GroupProject
 
         void cmd_Update_Click(object sender, EventArgs e)
         {
-            if (dataGood())
+            if (DataGood())
             {
                 int skillId = Convert.ToInt32(txt_ID.Text);
                 string skillName = txt_Name.Text;
                 string skillLevel = txt_ExpLevel.Text;
                 int yearsExp = Convert.ToInt32(txt_YearsExp.Text);
                 string desc = txt_desciption.Text;
-                SkillRecord sk = new SkillRecord(skillId, skillName, skillLevel, yearsExp, desc);
+                SkillRecord sr = new SkillRecord(skillId, skillName, skillLevel, yearsExp, desc);
                 try
                 {
                     file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
-                    sk.write(file);
-                    ReadFile();
+                    sr.Write(file);
+                    ReadFileAndUpdateTable();
                     SetControlState(insertState);
                 }
                 catch (IOException ex)
@@ -246,15 +251,15 @@ namespace GroupProject
 
         void cmd_Insert_Click(object sender, EventArgs e)
         {
-            if(cmd_Insert.Text.Equals("Cancel"))
+            if (cmd_Insert.Text.Equals("Cancel"))
             {
                 SetControlState(insertState);
                 return;
             }
-            if(dataGood())
+            if (DataGood())
             {
                 int skillId = Convert.ToInt32(txt_ID.Text);
-                if(IsValidIndex(skillId, insertState))
+                if (IsValidIndex(skillId))
                 {
                     string skillName = txt_Name.Text;
                     string skillLevel = txt_ExpLevel.Text;
@@ -264,10 +269,10 @@ namespace GroupProject
                     try
                     {
                         file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
-                        record.write(file);
-                        ReadFile();
+                        record.Write(file);
+                        ReadFileAndUpdateTable();
                     }
-                    catch(IOException ex)
+                    catch (IOException ex)
                     {
                         DisplayErrorMessage(ex.Message, "Error Inserting Record");
                     }
@@ -277,18 +282,17 @@ namespace GroupProject
 
         void cmd_Delete_Click(object sender, EventArgs e)
         {
-            // TODO: Implement
             if (MessageBox.Show("Are you sure you want delete this SkillRecord?", "Confirm Record Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
             {
                 // delete record
                 int skillId = Convert.ToInt32(txt_ID.Text);
-                SkillRecord sk = new SkillRecord();
+                SkillRecord sr = new SkillRecord();
                 try
                 {
                     // position file pointer
                     file.Seek((skillId - 1) * SkillRecord.RECORD_SIZE, SeekOrigin.Begin);
-                    sk.write(file);
-                    ReadFile();
+                    sr.Write(file);
+                    ReadFileAndUpdateTable();
                     SetControlState(insertState);
                 }
                 catch (IOException ex)
@@ -312,29 +316,29 @@ namespace GroupProject
             }
         }
 
-        void ReadFile()
+        void ReadFileAndUpdateTable()
         {
             table.Rows.Clear();
-            SkillRecord sk = new SkillRecord();
+            SkillRecord sr = new SkillRecord();
             try
             {
-                file.Seek(0,SeekOrigin.Begin);
+                file.Seek(0, SeekOrigin.Begin);
                 for (int i = 0; i < maxRecords; i++)
                 {
-                    sk.read(file);
-                    if (sk.SkillID > 0)
+                    sr.Read(file);
+                    if (sr.SkillID > 0)
                     {
                         DataRow dr = table.NewRow();
-                        dr["SkillID"] = sk.SkillID;
-                        dr["SkillName"] = sk.SkillName.Trim();
-                        dr["SkillLevel"] = sk.SkillLevel.Trim();
-                        dr["YearsExperience"] = sk.YearsExperience;
-                        dr["Description"] = sk.Desc.Trim();
+                        dr["SkillID"] = sr.SkillID;
+                        dr["SkillName"] = sr.SkillName.Trim();
+                        dr["SkillLevel"] = sr.SkillLevel.Trim();
+                        dr["YearsExperience"] = sr.YearsExperience;
+                        dr["Description"] = sr.Desc.Trim();
                         table.Rows.Add(dr);
                     }
                 }
                 dataGridView1.ClearSelection();
-                ClearText();
+                ClearTextAndSelection();
             }
             catch (IOException ex)
             {
@@ -342,7 +346,7 @@ namespace GroupProject
             }
         }
 
-        private void ClearText()
+        private void ClearTextAndSelection()
         {
 
             txt_ExpLevel.Text = "";
@@ -356,7 +360,7 @@ namespace GroupProject
             dataGridView1.ClearSelection();
         }
 
-        private bool dataGood()
+        private bool DataGood()
         {
             if (txt_ID.Text.Length < 1)
             {
@@ -374,7 +378,7 @@ namespace GroupProject
 
             if (txt_ExpLevel.Text.Length < 1)
             {
-                DisplayErrorMessage("Exprience Level Required!", "Missing Year of Exprience Level");
+                DisplayErrorMessage("Exprience Level Required!", "Missing Exprience Level");
                 txt_ExpLevel.Focus();
                 return false;
             }
@@ -385,9 +389,9 @@ namespace GroupProject
                 txt_YearsExp.Focus();
                 return false;
             }
-            else if(Convert.ToInt32(txt_YearsExp.Text) < 0)
+            else if (Convert.ToInt32(txt_YearsExp.Text) < 0)
             {
-                DisplayErrorMessage("Years of Exprience Have to be at least 0!", "Years of Exprience less than 0");
+                DisplayErrorMessage("Years of Exprience cannot be less than 0!", "Years of Exprience less than 0");
                 txt_YearsExp.Focus();
                 return false;
             }
@@ -402,7 +406,7 @@ namespace GroupProject
             return true;
         }
 
-        bool IsValidIndex(int index, string state)
+        bool IsValidIndex(int index)
         {
             if (index < 1 || index > 100)
             {
@@ -415,24 +419,10 @@ namespace GroupProject
             {
                 if (index == Convert.ToInt32(table.Rows[i].ItemArray[0]))
                 {
-                    if (state.Equals(insertState))
-                    {
-                        DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
-                        txt_ID.Focus();
-                        txt_ID.SelectAll();
-                        return false;
-                    }
-                    else if (state.Equals(updateState))
-                    {
-                        int currentIndex = Convert.ToInt32(txt_ID.Text);
-                        if (index != currentIndex)
-                        {
-                            DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
-                            txt_ID.Focus();
-                            txt_ID.SelectAll();
-                            return false;
-                        }
-                    }
+                    DisplayErrorMessage("Skill ID selected is already in use.", "Invalid Skill ID");
+                    txt_ID.Focus();
+                    txt_ID.SelectAll();
+                    return false;
                 }
             }
             return true;
@@ -446,7 +436,7 @@ namespace GroupProject
                 cmd_Insert.Text = "Insert";
                 cmd_Update.Enabled = false;
                 cmd_Delete.Enabled = false;
-                ClearText();
+                ClearTextAndSelection();
             }
             else if (state.Equals(updateState))
             {
